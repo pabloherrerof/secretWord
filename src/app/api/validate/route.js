@@ -4,16 +4,18 @@ import { PrismaClient } from "@prisma/client";
  async function getServerSideProps(context) {
   if (typeof window === 'undefined') {
 
-    const url = context.req.url;
+    const url = new URL(request.url); 
   }
 
   return { props: {} };
 }
-export async function GET(request, res) {
+export async function GET(request, res, {props}) {
   try {
     const prisma = new PrismaClient();
-    const url = new URL(request.url); 
+    console.log(props)
+   
     const word = url.searchParams.get('query'); 
+
     const isValid = await prisma.dictionary.findMany({
         where: {
         word: {
