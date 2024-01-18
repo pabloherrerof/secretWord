@@ -12,22 +12,22 @@ import { PrismaClient } from "@prisma/client";
 export async function GET(request, res) {
   try {
     const prisma = new PrismaClient();
-    /* const url = new URL(request.url); */
-    /* const word = url.searchParams.get('query'); */
-/* const isValid = await prisma.dictionary.findMany({
+    const url = new URL(request.url); 
+    const word = url.searchParams.get('query'); 
+    const isValid = await prisma.dictionary.findMany({
         where: {
         word: {
           equals: word
         }
       }
-    }) */
+    }) 
    
-    /* if (isValid.length === 0) {
+    if (isValid.length === 0) {
         return new NextResponse(false, {
             status: 202,
             statusText: "Not a valid word",
         });
-        } else */ return new NextResponse(true, {
+        } else  return new NextResponse(true, {
       status: 200,
       headers: {
         "Content-Type": "application/json",

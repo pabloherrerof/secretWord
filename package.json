@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "prisma": {
+    "seed": "node ./prisma/seeder.js"
+  },
   "dependencies": {
     "@prisma/client": "^5.8.1",
     "next": "14.1.0",
