@@ -137,8 +137,6 @@ export default function WordForm() {
     setNewword(true);
     setModal(false);
   };
-  console.log(fieldValues)
-  console.log(validationColors)
 
 
   return (
