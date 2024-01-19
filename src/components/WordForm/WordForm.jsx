@@ -14,6 +14,8 @@ import {
 import { Modal } from "./Modal/Modal";
 
 
+
+
 export default function WordForm() {
   const [wordLength, setWordLength] = useState(5);
   const [word, setWord] = useState("");
@@ -31,6 +33,7 @@ export default function WordForm() {
   const inputRefs = useRef([]);
   const [modal, setModal] = useState(false);
   const [win, setWin] = useState(false);
+ 
     console.log(word)
   useEffect(() => {
     inputRefs.current = Array.from({ length: wordLength * 5 }, () =>
@@ -50,32 +53,52 @@ export default function WordForm() {
             .fill(null)
             .map(() => Array(wordLength).fill(""))
         )
-      )
+      ).then(() => {
+        setValidationColors(
+          Array(5).fill(Array(wordLength).fill("transparent"))
+        )
+  })
       .catch((error) => console.error(error));
   }, [wordLength, newWord]);
 
 
-  const validateWord = async (word) => {
+  const validateWord = async (wordToValidate) => {
     try {
-      const response = await fetch(`api/validate?query=${word}`);
-      if (!response.ok) throw new Error("Network response was not ok");
-      const data = await response.json();
-      console.log(data);
-      return data;
+      const url = `https://wordsapiv1.p.rapidapi.com/words/${wordToValidate}`;
+      const options = {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': process.env.NEXT_PUBLIC_API_URL,
+          'X-RapidAPI-Host': process.env.NEXT_PUBLIC_API_HOST
+        }
+      };
+      const response = await fetch(url, options);
+      const result = await response.json();
+      
+      if (response.ok && result.word) {
+        return { valid: true };
+      } else {
+        return { valid: false };
+      }
     } catch (error) {
       console.error("Server Error", error);
+      return { valid: false };
     }
   };
+
 
   const handleRowCompletion = async () => {
     if (fieldValues[activeRow].includes("")) {
       toastError("Please fill all the fields");
       return;
     }
+    
 
-    const isValidWord = await validateWord(fieldValues[activeRow].join(""));
+    const userWord = fieldValues[activeRow].join("");
+    const validationResponse = await validateWord(userWord);
 
-    if (isValidWord) {
+
+    if (validationResponse.valid) {
       if (activeRow <= 4) {
 
         const validatedRowColors = validateLetters(
@@ -92,16 +115,14 @@ export default function WordForm() {
         setActiveRow(activeRow + 1);
           setTimeout(() => {
             if(activeRow < 4){
-            const input = inputRefs.current[(activeRow + 1 )* 5];
+            const input = inputRefs.current[(activeRow + 1 )* wordLength];
             input.focus();
             }
           }, 400);
       }
       if (activeRow === 4) {
         setActiveRow(undefined);
-        setNewword(true);
         setModal(true);
-
       }
     } else {
       toastWarning("This word doesn't exist");
@@ -109,14 +130,15 @@ export default function WordForm() {
   };
 
   const handleRestart = () => {
+    setButtonMessage("Try")
     setActiveRow(0);
     setFieldValues(Array(5).fill(Array(wordLength).fill("")));
     setValidationColors(Array(5).fill(Array(wordLength).fill("transparent")));
-    setButtonMessage("Try");
     setNewword(true);
     setModal(false);
   };
-
+  console.log(fieldValues)
+  console.log(validationColors)
 
 
   return (

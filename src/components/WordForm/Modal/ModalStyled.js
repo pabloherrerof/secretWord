@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
 export const ModalContainer = styled.div`
+   transition:all 0.3s ease;
+    
+    &.fade:hover{
+    opacity:0.5;
+}
     position: fixed;
     z-index: 1000;
     background-color: white;
@@ -45,6 +50,9 @@ export const LottieContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+ 
     `;
+
+  
 
     

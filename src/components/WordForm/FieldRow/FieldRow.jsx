@@ -1,5 +1,5 @@
 "use client"
-import { Field, FieldRow, LetterContainer } from "../WordFormStyled";
+import { Field, FieldRow } from "../WordFormStyled";
 import { handleKeyDown } from "../utils";
 
 export const FieldRowComponent = ({
@@ -9,7 +9,6 @@ export const FieldRowComponent = ({
     const isEditable = rowIndex === activeRow;
     const value = fieldValues[rowIndex][index];
     const backgroundColor = validationColors[rowIndex][index];
-
 
     return isEditable ? (
       <Field

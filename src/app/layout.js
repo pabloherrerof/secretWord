@@ -8,10 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { LayoutStyled } from '@/components/Layout/LayoutStyled';
 const openSans = Open_Sans({ subsets: ['latin'] })
 
-export const metadata = {
-  title: 'Secret Word',
-  description: 'Created by Pablo Herrero',
-}
+
 
 export default function RootLayout({ children }) {
   return (
